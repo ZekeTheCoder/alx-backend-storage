@@ -1,2 +1,4 @@
 0x00-MySQL_Advanced/names.sql
 0x00-MySQL_Advanced/.gitattributes
+0x00-MySQL_Advanced/100-average_weighted_score1.sql
+.gitignore
