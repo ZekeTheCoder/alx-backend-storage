@@ -7,7 +7,9 @@ def collection(db: dict) -> int:
     """Function to retrieve logs information"""
     client = MongoClient('mongodb://127.0.0.1:27017')
     logs = client.logs.nginx
-    return logs.count_documents(db)
+    logs_count = logs.count_documents(db)
+    client.close()  # Close the connection after performing the query
+    return logs_count
 
 
 def main():
