@@ -13,13 +13,18 @@ def collection(db: dict) -> int:
 def main():
     """Function that returns stats about Nginx logs stored in MongoDB"""
 
-    print(f"{collection({})} logs")  # total number of logs
+    # total number of logs
+    print(f"{collection({})} logs")
+
+    # HTTP methods to check
+    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
+
+    # count for each HTTP method
     print("Methods:")
-    print(f"\tmethod GET: {collection({'method': 'GET'})}")
-    print(f"\tmethod POST: {collection({'method': 'POST'})}")
-    print(f"\tmethod PUT: {collection({'method': 'PUT'})}")
-    print(f"\tmethod PATCH: {collection({'method': 'PATCH'})}")
-    print(f"\tmethod DELETE: {collection({'method': 'DELETE'})}")
+    for method in methods:
+        print(f"\tmethod {method}: {collection({'method': method})}")
+
+    # status check count
     print(f"{collection({'method': 'GET', 'path': '/status'})} status check")
 
 
