@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """This script provides some stats about Nginx logs stored in MongoDB."""
-
 from pymongo import MongoClient
 
 
@@ -14,18 +13,13 @@ def collection(db: dict) -> int:
 def main():
     """Function that returns stats about Nginx logs stored in MongoDB"""
 
-    # total number of logs
-    print(f"{collection({})} logs")
-
-    # HTTP methods to check
-    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-
-    # count for each HTTP method
+    print(f"{collection({})} logs")  # total number of logs
     print("Methods:")
-    for method in methods:
-        print(f"\tmethod {method}: {collection({'method': method})}")
-
-    # status check count
+    print(f"\tmethod GET: {collection({'method': 'GET'})}")
+    print(f"\tmethod POST: {collection({'method': 'POST'})}")
+    print(f"\tmethod PUT: {collection({'method': 'PUT'})}")
+    print(f"\tmethod PATCH: {collection({'method': 'PATCH'})}")
+    print(f"\tmethod DELETE: {collection({'method': 'DELETE'})}")
     print(f"{collection({'method': 'GET', 'path': '/status'})} status check")
 
 
