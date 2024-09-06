@@ -2,16 +2,25 @@
 """This script provides some stats about Nginx logs stored in MongoDB."""
 from pymongo import MongoClient
 
-if __name__ == "__main__":
+
+def collection(db: dict) -> int:
+    """Function that retrieve logs information"""
     client = MongoClient('mongodb://127.0.0.1:27017')
     logs = client.logs.nginx
-    print(f"{logs.count_documents({})} logs")
+    return logs.count_documents(db)
 
-    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
+
+def main():
+    """Function that returns stats about Nginx logs stored in MongoDB"""
+    print(f"{collection({})} logs")
     print("Methods:")
-    for method in methods:
-        print(f"\tmethod {method}: {logs.count_documents({'method': method})}")
+    print(f"\tmethod GET: {collection({'method': 'GET'})}")
+    print(f"\tmethod POST: {collection({'method': 'POST'})}")
+    print(f"\tmethod PUT: {collection({'method': 'PUT'})}")
+    print(f"\tmethod PATCH: {collection({'method': 'PATCH'})}")
+    print(f"\tmethod DELETE: {collection({'method': 'DELETE'})}")
+    print(f"{collection({'method': 'GET', 'path': '/status'})} status check")
 
-    status_check_count = logs.count_documents(
-        {'method': 'GET', 'path': '/status'})
-    print(f"{status_check_count} status check")
+
+if __name__ == "__main__":
+    main()
