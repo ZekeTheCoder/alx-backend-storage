@@ -28,7 +28,7 @@ def get_page(url: str) -> str:
     """Fetch HTML content of a URL and track the number of accesses."""
     count = redis_client.incr(f"count:{url}")
     content = requests.get(url).text
-    print(f"Access count: {count}")
+    # print(f"Access count: {count}")
     return content
 
 
