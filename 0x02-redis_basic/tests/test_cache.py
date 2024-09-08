@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-
 """Test cases for the Cache class."""
-
 import unittest
 import redis
-from exercise import Cache
+from exercise import Cache, replay
 
 
 def byte_to_str(byte_data):
@@ -80,6 +78,53 @@ class TestCache(unittest.TestCase):
         self.assertEqual(
             inputs, [b"('first',)", b"('second',)", b"('third',)"])
         self.assertEqual(outputs, [s1.encode(), s2.encode(), s3.encode()])
+
+    def test_call_history2(self):
+        """Test that the call_history decorator works as expected."""
+        # Store some values
+        s1 = self.cache.store("foo")
+        s2 = self.cache.store("bar")
+        s3 = self.cache.store(42)
+
+        # Retrieve input and output history
+        inputs_key = f"{self.cache.store.__qualname__}:inputs"
+        outputs_key = f"{self.cache.store.__qualname__}:outputs"
+
+        inputs = self.cache._redis.lrange(inputs_key, 0, -1)
+        outputs = self.cache._redis.lrange(outputs_key, 0, -1)
+
+        expected_inputs = [b"('foo',)", b"('bar',)", b'(42,)']
+        expected_outputs = [s1.encode(), s2.encode(), s3.encode()]
+
+        self.assertEqual(inputs, expected_inputs)
+        self.assertEqual(outputs, expected_outputs)
+
+    def test_replay(self):
+        """Test the replay function."""
+        # Store some values
+        s1 = self.cache.store("foo")
+        s2 = self.cache.store("bar")
+        s3 = self.cache.store(42)
+
+        # Capture the output of the replay function
+        import io
+        import sys
+        captured_output = io.StringIO()
+        sys.stdout = captured_output
+        replay(self.cache.store)
+        sys.stdout = sys.__stdout__
+
+        # Construct the expected output based on stored history
+        expected_output = (
+            f"Cache.store was called 3 times:\n"
+            f"Cache.store(*('foo',)) -> {s1}\n"
+            f"Cache.store(*('bar',)) -> {s2}\n"
+            f"Cache.store(*(42,)) -> {s3}\n"
+        )
+
+        # Verify the captured output matches the expected output
+        self.assertEqual(captured_output.getvalue().strip(),
+                         expected_output.strip())
 
 
 if __name__ == '__main__':
