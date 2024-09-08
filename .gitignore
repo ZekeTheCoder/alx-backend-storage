@@ -2,3 +2,4 @@
 0x00-MySQL_Advanced/.gitattributes
 0x00-MySQL_Advanced/100-average_weighted_score1.sql
 .gitignore
+0x01-NoSQL/12-log_stats copy.py
