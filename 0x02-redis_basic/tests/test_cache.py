@@ -7,6 +7,11 @@ import redis
 from exercise import Cache
 
 
+def byte_to_str(byte_data):
+    """Convert byte data to a UTF-8 string."""
+    return byte_data.decode("utf-8")
+
+
 class TestCache(unittest.TestCase):
     """Test cases for the Cache class."""
 
@@ -43,7 +48,21 @@ class TestCache(unittest.TestCase):
         data = b"custom_conversion"
         key = self.cache.store(data)
         self.assertEqual(self.cache.get(
-            key, fn=lambda d: d.decode("utf-8")), data.decode("utf-8"))
+            key, fn=byte_to_str), data.decode("utf-8"))
+        # self.assertEqual(self.cache.get(
+        #     key, fn=lambda d: d.decode("utf-8")), data.decode("utf-8"))
+
+    def test_count_calls(self):
+        """Test that the count_calls decorator works as expected."""
+        # Store some values
+        self.cache.store(b"first")
+        self.cache.store(b"second")
+        self.cache.store(b"third")
+        self.cache.store(b"fourth")
+
+        # Check if the count is correct
+        call_count = self.cache.get(self.cache.store.__qualname__)
+        self.assertEqual(call_count, b'4')  # We called store 4 times
 
 
 if __name__ == '__main__':
