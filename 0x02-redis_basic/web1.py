@@ -34,10 +34,10 @@ def access_count(url: str) -> int:
     return int(count) if count else 0
 
 
-if __name__ == "__main__":
-    # print(access_count("https://httpbin.org/delay/5"))
-    url = "https://httpbin.org/delay/5"
-    print(f"First access: {get_page(url)}")
-    print(f"Access count: {access_count(url)}")
-    # print(f"Second access: {get_page(url)}")
-    # print(f"Access count: {access_count(url)}")
+# if __name__ == "__main__":
+#     # print(access_count("https://httpbin.org/delay/5"))
+#     url = "https://httpbin.org/delay/5"
+#     print(f"First access: {get_page(url)}")
+#     print(f"Access count: {access_count(url)}")
+#     # print(f"Second access: {get_page(url)}")
+#     # print(f"Access count: {access_count(url)}")
