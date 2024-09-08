@@ -32,8 +32,8 @@ def get_page(url: str) -> str:
     return content
 
 
-if __name__ == "__main__":
-    # url = "http://slowwly.robertomurray.co.uk"
-    url = "https://httpbin.org/delay/10"
-    print(f"First access: {get_page(url)}")
-    print(f"Second access: {get_page(url)}")
+# if __name__ == "__main__":
+#     # url = "http://slowwly.robertomurray.co.uk"
+#     url = "https://httpbin.org/delay/10"
+#     print(f"First access: {get_page(url)}")
+#     print(f"Second access: {get_page(url)}")
