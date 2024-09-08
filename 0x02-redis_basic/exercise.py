@@ -81,3 +81,20 @@ class Cache:
             return int(data.decode("utf-8"))
         except ValueError:
             return None
+
+
+def replay(method: Callable) -> None:
+    """Display the history of calls of a particular function."""
+    key = method.__qualname__  # base key of qualified name
+    redis_instance = method.__self__._redis
+    inputs_key = f"{key}:inputs"
+    outputs_key = f"{key}:outputs"
+
+    # all inputs and outputs stored in the Redis list.
+    inputs = redis_instance.lrange(inputs_key, 0, -1)
+    outputs = redis_instance.lrange(outputs_key, 0, -1)
+
+    print(f"{key} was called {len(inputs)} times:")
+    # iterate both lists simultaneously.
+    for inp, outp in zip(inputs, outputs):
+        print(f"{key}(*{inp.decode('utf-8')}) -> {outp.decode('utf-8')}")
